@@ -1,0 +1,23 @@
+.DatePicker {
+  background: white;
+  height: 150px;
+  padding: 1em;
+  position: absolute;
+  bottom: 2em;
+  left: 2em;
+  right: 2em;
+  z-index: 5000;
+
+  &-container {
+    .timeline {
+      stroke: black;
+    }
+
+    .tick {
+      stroke: black;
+    }
+
+    .current-date-marker {
+    }
+  }
+}
