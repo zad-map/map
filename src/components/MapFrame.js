@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ReactMapboxGl, { ZoomControl } from "react-mapbox-gl";
+import classNames from 'classnames';
 
 import VideoLayer from './VideoLayer';
 import VideoPopup from './VideoPopup';
@@ -10,10 +11,13 @@ const Map = ReactMapboxGl({
 });
 
 const MapFrame = (props) => {
+  const [mouseOverVideo, setMouseOverVideo] = useState(false);
   const [selectedVideo, selectVideo] = useState(null);
 
   return (
-    <div className='MapFrame'>
+    <div className={classNames('MapFrame', {
+      'over-point': mouseOverVideo
+    })}>
       {/* eslint-disable-next-line */}
       <Map
         style="https://api.maptiler.com/maps/basic/style.json?key=RTkrAcFuX6L6NwSiRn6b" 
@@ -21,7 +25,11 @@ const MapFrame = (props) => {
       >
         <ZoomControl/>
 
-        <VideoLayer onVideoSelect={video => selectVideo(video)} />
+        <VideoLayer
+          onMouseEnter={video => setMouseOverVideo(true)}
+          onMouseLeave={video => setMouseOverVideo(false)}
+          onVideoSelect={video => selectVideo(video)}
+        />
 
         {selectedVideo ? (
           <VideoPopup 

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@u-wave/react-vimeo": "^0.8.1",
+    "classnames": "^2.2.6",
     "d3": "^5.14.2",
     "i18next": "^19.0.1",
     "i18next-browser-languagedetector": "^4.0.1",

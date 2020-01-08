@@ -2,7 +2,7 @@ import React from 'react';
 import { Layer, Feature } from "react-mapbox-gl";
 import { useSelector } from 'react-redux';
 
-const VideoLayer = ({ onVideoSelect }) => {
+const VideoLayer = ({ onMouseEnter, onMouseLeave, onVideoSelect }) => {
   const date = useSelector(state => state.date.date);
   const videoPoints = useSelector(state => state.videoPoints.points);
 
@@ -15,7 +15,8 @@ const VideoLayer = ({ onVideoSelect }) => {
       id='videos'
       type='circle'
       paint={{
-        'circle-color': '#ff0000'
+        'circle-color': '#000000',
+        'circle-radius': 15
       }}
     >
       {currentVideos.map(point => (
@@ -24,6 +25,8 @@ const VideoLayer = ({ onVideoSelect }) => {
           coordinates={[point.longitude, point.latitude]}
           properties={point}
           onClick={e => onVideoSelect(e.feature)}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
         />
       ))}
     </Layer>
