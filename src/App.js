@@ -4,6 +4,7 @@ import './App.css';
 import { fetchVideoPoints } from './actions/videoPoints';
 import DatePicker from './components/DatePicker';
 import MapFrame from './components/MapFrame';
+import TextOverlay from './components/TextOverlay';
 
 function App() {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ function App() {
 
   return (
     <div className="App">
+      <TextOverlay/>
       <MapFrame/>
       <DatePicker/>
     </div>
