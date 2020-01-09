@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import VideoLayer from './VideoLayer';
 import VideoPopup from './VideoPopup';
+import ZadRaster from './ZadRaster';
 import './MapFrame.scss';
 
 const Map = ReactMapboxGl({
@@ -24,6 +25,8 @@ const MapFrame = (props) => {
         center={[-1.733823,47.348622]}
       >
         <ZoomControl/>
+
+        <ZadRaster/>
 
         <VideoLayer
           onMouseEnter={video => setMouseOverVideo(true)}
