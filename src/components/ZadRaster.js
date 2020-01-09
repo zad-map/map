@@ -6,7 +6,7 @@ const ZadRaster = () => {
     const RASTER_SOURCE_OPTIONS = {
       scheme: "tms",
       type: "raster",
-      tiles: ["/tiles/zad-2015/{z}/{x}/{y}.png"],
+      tiles: ["./tiles/zad-2015/{z}/{x}/{y}.png"],
       tileSize: 256
     };
 
