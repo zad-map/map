@@ -1,4 +1,4 @@
-import React, { Suspense, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import * as d3 from 'd3';
@@ -9,6 +9,10 @@ import { MINIMUM_DATE } from '../constants/config';
 import './DatePicker.scss';
 
 const DatePicker = (props) => {
+  const [svgDimensions, setSvgDimensions] = useState({
+    height: 50,
+    width: 100
+  });
   const [isDragging, setIsDragging] = useState(false);
   const svgElement = useRef(null);
 
@@ -17,15 +21,12 @@ const DatePicker = (props) => {
   const date = useSelector(state => state.date.date);
   const dispatch = useDispatch();
 
-  const width = 1200;
-  const height = 100;
-
   const startDate = MINIMUM_DATE.toDate();
   const endDate = new Date();
 
   const dateScale = d3.scaleTime()
     .domain([startDate, endDate])
-    .range([0, width]);
+    .range([0, svgDimensions.width]);
 
   const years = d3.timeYear.every(1).range(startDate, endDate);
 
@@ -38,6 +39,25 @@ const DatePicker = (props) => {
     };
   }
 
+  const resize = () => {
+    const rect = svgElement.current.getBoundingClientRect();
+    setSvgDimensions({
+      height: rect.height,
+      width: rect.width
+    });
+  };
+
+  useEffect(() => {
+    const rect = svgElement.current.getBoundingClientRect();
+    setSvgDimensions({
+      height: rect.height,
+      width: rect.width
+    });
+
+    window.addEventListener('resize', resize);
+    return () => window.removeEventListener('resize', resize);
+  }, [svgElement]);
+
   return (
     <div className='DatePicker'>
       <div className='DatePicker-display'>
@@ -46,7 +66,8 @@ const DatePicker = (props) => {
       <div className='DatePicker-container'>
         <svg 
           ref={svgElement}
-          viewBox={`0 0 ${width} ${height}`}
+          style={{ height: '100%', width: '100%' }}
+          viewBox={`0 0 ${svgDimensions.width} ${svgDimensions.height}`}
           onMouseUp={() => setIsDragging(false)}
           onMouseLeave={() => setIsDragging(false)}
           onMouseMove={e => {
@@ -60,8 +81,8 @@ const DatePicker = (props) => {
           <g>
             <path
               d={d3.line()([
-                [dateScale(startDate), height / 2],
-                [dateScale(endDate), height / 2]
+                [dateScale(startDate), svgDimensions.height / 2],
+                [dateScale(endDate), svgDimensions.height / 2]
               ])}
               className='timeline'
             />
@@ -71,8 +92,14 @@ const DatePicker = (props) => {
               <path
                 key={year.toISOString()}
                 d={d3.line()([
-                  [dateScale(year), height / 2 - height / 4],
-                  [dateScale(year), height / 2 + height / 4]
+                  [
+                    dateScale(year),
+                    svgDimensions.height / 2 - svgDimensions.height / 4
+                  ],
+                  [
+                    dateScale(year),
+                    svgDimensions.height / 2 + svgDimensions.height / 4
+                  ]
                 ])}
                 className='tick'
               />
@@ -83,7 +110,7 @@ const DatePicker = (props) => {
               className='current-date-marker'
               r='10'
               cx={dateScale(date.toDate())}
-              cy={height / 2}
+              cy={svgDimensions.height / 2}
               onMouseDown={() => setIsDragging(true)}
             />
           </g>
